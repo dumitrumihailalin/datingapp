@@ -12,7 +12,7 @@ export class AppComponent {
   title: any;
 
   constructor(private http: HttpClient) {
-    this.title = '34. Safe storage of passwords';
+    this.title = 'works';
   }
 
   ngOnInit(): void {
