@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { User } from './_models/user';
+import { AccountService } from './_services/account.service';
+import { MembersService } from './_services/members.service';
 
 @Component({
   selector: 'app-root',
@@ -7,19 +10,30 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
-  users: any;
-  title: any;
-
-  constructor(private http: HttpClient) {
-    this.title = 'works';
+  loggedIn: boolean = true;
+  constructor(private http: HttpClient, private accountService: AccountService, private memberService: MembersService) {
   }
 
+  users: any;
+
   ngOnInit(): void {
-    this.http.get("https://localhost:5001/api/users").subscribe({
-      next: response => this.users = response,
-      error: error => console.log(error),
-      complete: () => console.log('Request completed')
-    })
+    this.setCurrentUser();
+    this.loggedIn = !!this.accountService.getAuth();
+    console.log(this.loggedIn)
+  }
+
+  async getCurrentUser()
+  {
+    await this.accountService.currentUser$.subscribe({
+      next: user => this.loggedIn = !!user,
+      error: error => console.log(error)
+    });
+  }
+
+  setCurrentUser() {
+    const userString = localStorage.getItem('user');
+    if (!userString) return;
+    const user: User = JSON.parse(userString);
+    this.accountService.setCurrentUser(user);
   }
 }

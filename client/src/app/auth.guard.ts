@@ -1,0 +1,20 @@
+import { Injectable, inject } from '@angular/core';
+import { CanActivateFn } from '@angular/router';
+import { Observable, map } from 'rxjs';
+import { AccountService } from './_services/account.service';
+
+
+export const authGuard: CanActivateFn = (route, state) => {
+  const accountService = inject(AccountService)
+ 
+
+  return accountService.currentUser$.pipe(
+    map(user => {
+      if (user) return true;
+      else {
+        console.log("error")
+        return false;
+      }
+    })
+  )
+}
