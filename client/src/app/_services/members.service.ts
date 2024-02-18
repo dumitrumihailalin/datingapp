@@ -23,4 +23,9 @@ export class MembersService {
   getProfile() {
     return this.http.get<Member>(this.baseUrl + 'profile/');
   }
+
+  addFavourite(model: any) {
+    model = {'userId': model};
+    return this.http.post<Member>(this.baseUrl + 'profile/add-favourite', model);
+  }
 }

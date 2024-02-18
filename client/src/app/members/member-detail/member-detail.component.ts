@@ -24,4 +24,6 @@ export class MemberDetailComponent implements OnInit {
       next: member => this.member = member
     });
   }
+
+
 }
